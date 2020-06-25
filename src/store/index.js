@@ -39,8 +39,8 @@ const myMutations = {
 
 const myActions = {
   //登录
-  async [types.LOGIN]({ commit }, data) {
-    let resp = await axios.post("login", data);
+  async [types.TEACHERLOGIN]({ commit }, data) {
+    let resp = await axios.post("teacherlogin", data);
     let auth = resp.headers[author];
     console.log(resp.data);
     if (auth != null) {
