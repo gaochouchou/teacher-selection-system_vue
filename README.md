@@ -1,24 +1,36 @@
-# graduation-design
+# 毕业设计导师学生互选平台_vue
 
-## Project setup
-```
-npm install
-```
+## 项目描述
+实现毕业生毕业设计双向选择。教师可登陆后可查看数据统计信息，包含已选学生名单，课程权值，指导学生和已选学生数量，并能设置相应权重以及参数，从Excel中批量导入学生，单独内定学生，修改自己可指导学生的数量。学生登陆后可查看是否登陆，输入成绩，后台判定是否符合入选范围，并有友好的人机交互体验。
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## 开发环境
+#### 开发工具
+- VS Code
+#### 依赖
+- vuetify
+- axios
+- router
+- store
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## 2020.6.27
+### 增加友好人机交互和vuetify安装
+- vuetify组件安装
+- 友好人机交互，错误提醒
+- 教师内定学生方法
+## 2020.6.26
+### 增加异步方法和拦截器
+- 教师方法
+    - 教师登陆
+    - 教师主页获取
+    - 修改权重
+    - 修改指导教师信息
+- 学生方法
+    - 学生登陆
+    - 学生主页获取
+    - 学生成绩上传
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## 2020.6.25
+### init
+- 安装依赖，初始化项目
+- 新增登陆页
+- 新增学生页和教师管理页
