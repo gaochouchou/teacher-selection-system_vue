@@ -1,12 +1,19 @@
 <template>
-  <div id="app">
+  <v-app id="app">
     <div id="nav">
-      <header id="title">导师双选系统</header>
+      <!-- <header id="title">导师双选系统</header> -->
     </div>
     <router-view />
-  </div>
+    <alertdialog />
+  </v-app>
 </template>
-
+<script>
+export default {
+  components: {
+    alertdialog: () => import("@/components/AlertDialog.vue")
+  }
+};
+</script>
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

@@ -24,6 +24,8 @@ axios.interceptors.response.use(
   resp => resp,
   error => {
     let resp = error.response;
+    console.log("拦截器捕获");
+    console.log(resp);
     if (resp) {
       switch (resp.status) {
         case 401:

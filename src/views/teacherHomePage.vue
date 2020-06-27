@@ -1,6 +1,7 @@
 <template>
   <div>
     <h1>欢迎您：王波老师</h1>
+
     <br />
 
     <h1>读取excel表格</h1>
@@ -22,19 +23,21 @@
       </tr>
     </table>
 
+    students:{{ students }}
     <br />
+    <button type="button" @click="Submit">提交名单</button>
 
     课程：
     <form>
       <select v-model="id">
         <option v-for="(c, index) in courses" :key="index" :value="c.id"
-          >{{ c.courseName }}
+          >{{ c.name }}
         </option>
       </select>
       <br />
-      权重：<input type="number" step="0.1" v-model="weight" />
+      权重：<input type="number" v-model="weight" />
       <br />
-      最低分：<input type="number" step="0.1" v-model="lowestScore" />
+      最低分：<input type="number" v-model="lowestScore" />
       <br />
       <button type="button" @click="setWeight">修改</button>
     </form>
@@ -42,10 +45,11 @@
     <br />
     设置实际指导学生数：
     <form>
-      学生数：<input type="number" v-model="totalStudents" /><button
-        type="button"
-        @click="patchAmount"
-      >
+      学生数：<input
+        type="number"
+        v-model="totalStudents"
+        value="teacher.qualifiedNum"
+      /><button type="button" @click="patchAmount">
         提交
       </button>
     </form>
@@ -59,14 +63,14 @@
       </thead>
 
       <tr>
-        <td>{{ teacher.totalStudents }}</td>
-        <td>{{ teacher.suitableStudents }}</td>
+        <td>{{ teacher.qualifiedNum }}</td>
+        <td>{{ teacher.actualNum }}</td>
       </tr>
     </table>
 
     已经接受的学生：
     <ul>
-      <li v-for="(s, index) in students" :key="index">{{ s.user.name }}</li>
+      <li v-for="(s, index) in stus" :key="index">{{ s.name }}</li>
     </ul>
 
     <br />
@@ -84,7 +88,7 @@
         <td>{{ index + 1 }}</td>
         <td>{{ c.courseName }}</td>
         <td>{{ c.weight }}</td>
-        <td>{{ c.lowestScore }}</td>
+        <td>{{ c.minScore }}</td>
       </tr>
     </table>
   </div>
@@ -96,13 +100,14 @@ import { mapState } from "vuex";
 export default {
   created() {
     this.$store.dispatch("backendIndex");
-    // console.log("page" + this.students);
+    console.log(this.teacher);
   },
   data: () => ({
     id: null,
     weight: null,
     lowestScore: null,
-    totalStudents: null
+    totalStudents: null,
+    students: null
   }),
   methods: {
     read(event) {
@@ -117,19 +122,28 @@ export default {
       this.$store.dispatch("setWeight", {
         id: this.id,
         weight: this.weight,
-        lowestScore: this.lowestScore
+        minScore: this.lowestScore
       });
       location.reload();
     },
     patchAmount() {
       this.$store.dispatch("patchAmount", {
-        totalStudents: this.totalStudents
+        qualifiedNum: this.totalStudents
       });
       location.reload();
+    },
+    Submit() {
+      var _this = this;
+      this.students.forEach(function(e) {
+        _this.$store.dispatch("submitStudent", {
+          name: e.name,
+          studentId: e.number
+        });
+      });
     }
   },
   computed: {
-    ...mapState(["role", "teacher", "students", "courses"])
+    ...mapState(["role", "teacher", "courses", "stus"])
   }
 };
 </script>

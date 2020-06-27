@@ -13,7 +13,8 @@ const myState = {
   role: "none",
   teacher: null,
   courses: null,
-  students: null
+  stus: null,
+  ifselected: false
 };
 
 const myMutations = {
@@ -21,27 +22,47 @@ const myMutations = {
     state.isLogin = data;
   },
   [types.GET_EXCEPTION](state, data) {
+    console.log("exception");
+    console.log(data);
     state.exception = data;
   },
   [types.SET_ROLE](state, data) {
     state.role = data;
   },
   teacher(state, data) {
+    console.log(data);
     state.teacher = data;
   },
   courses(state, data) {
     state.courses = data;
   },
   students(state, data) {
-    state.students = data;
+    state.stus = data;
+  },
+  ifselected(state, data) {
+    state.ifselected = data;
   }
 };
 
 const myActions = {
   //登录
   async [types.TEACHERLOGIN]({ commit }, data) {
-    let resp = await axios.post("teacherlogin", data);
+    let resp = await axios.post("teacherLogin", data);
     let auth = resp.headers[author];
+    console.log("teacher" + resp.data.teacher);
+    console.log("storerole" + resp.data.role);
+    if (auth != null) {
+      sessionStorage.setItem(author, auth);
+      sessionStorage.setItem("role", resp.data.role);
+      commit(types.LOGIN, true);
+      commit(types.SET_ROLE, resp.data.role);
+    }
+  },
+
+  async [types.STUDENTLOGIN]({ commit }, data) {
+    let resp = await axios.post("studentLogin", data);
+    let auth = resp.headers[author];
+    console.log("teacher" + resp.data.teacher);
     console.log(resp.data);
     if (auth != null) {
       sessionStorage.setItem(author, auth);
@@ -54,24 +75,38 @@ const myActions = {
   async backendIndex({ commit }, data) {
     let resp = await axios.get("teacher/index");
 
+    console.log(resp.data.teacher);
+    console.log(resp.data.students);
+    console.log(resp.data.courses);
     commit("teacher", resp.data.teacher);
     commit("courses", resp.data.courses);
     commit("students", resp.data.students);
-    console.log("teacher" + resp.data.teacher);
-    console.log("students" + resp.data.students);
-    console.log("courses" + resp.data.courses);
+  },
+
+  async studentIndex({ commit }, data) {
+    let resp = await axios.get("student/index");
+
+    commit("ifselected", resp.data.IfSelected);
+    commit("courses", resp.data.courses);
+    console.log("ifselected" + resp.data.IfSelected);
+  },
+
+  async [types.STUDENT_SUBMIT]({ commit }, data) {
+    let resp = await axios.post("student/submit", data);
+    commit("ifselected", resp.data.succeed);
+    console.log("student/submit");
   },
 
   async setWeight({ commit }, data) {
-    let resp = await axios.post("teacher/setWeight", {
-      id: data.id,
-      weight: data.weight,
-      lowestScore: data.lowestScore
-    });
+    let resp = await axios.post("teacher/setWeight", data);
   },
 
-  async patchAmount({ commit }, data) {
-    let resp = await axios.patch("teacher/patchAmount", data);
+  async setAmount({ commit }, data) {
+    let resp = await axios.post("teacher/postAmount", data);
+  },
+  async selectStudnet({ commit }, data) {
+    console.log("发出axios");
+    let resp = await axios.post("teacher/selectStudent", data);
   }
 };
 
